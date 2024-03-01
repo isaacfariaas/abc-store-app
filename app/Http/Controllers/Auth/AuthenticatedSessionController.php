@@ -4,22 +4,32 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use DateInterval;
+use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): Response
+    public function store(LoginRequest $request)
     {
-        $request->authenticate();
 
-        $request->session()->regenerate();
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
-        return response()->noContent();
+            $user = Auth::user();
+            $expire_at = new DateTimeImmutable();
+            $expire_at = $expire_at->add(new DateInterval('PT1440M'));
+            $token = $user->createToken('JWT', ['*'], $expire_at);
+
+            return response()->json(["login" => true, "token" => $token->plainTextToken, "error" => ""], 200);
+        } else {
+            return response()->json(["login" => false, "token" => "", "error" => "User invalid"], 401);
+        }
     }
 
     /**
