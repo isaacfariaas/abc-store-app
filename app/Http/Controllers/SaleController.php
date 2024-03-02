@@ -158,4 +158,15 @@ class SaleController extends Controller
             }
         }
     }
+
+    public function destroy($id)
+    {
+        $sale = Sale::find($id);
+        if ($sale) {
+            $sale->delete();
+            return response()->json(['delete' => true, 'error' => ''], 200);
+        } else {
+            return response()->json(['delete' => false, 'error' => 'Sale not found'], 404);
+        }
+    }
 }
