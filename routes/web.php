@@ -25,6 +25,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/categories', [CategoryController::class, 'index'])
         ->name('categories');
     Route::resource('sales', SaleController::class)->except(['create', 'edit']);
+    Route::put('/sales_add_product/{id}' , [SaleController::class, 'addProduct'])
+        ->name('sales_add_product');
+    Route::delete('/sales_remove_product/{id}' , [SaleController::class, 'removeProduct'])
+        ->name('sales_remove_product');
 });
 
 require __DIR__ . '/auth.php';
