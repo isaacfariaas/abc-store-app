@@ -1,7 +1,7 @@
 services:
     app:
         build:
-            context: ./docker/8.3
+            context: ./vendor/laravel/sail/runtimes/8.3
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
@@ -36,7 +36,7 @@ services:
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
             - 'sail-mysql:/var/lib/mysql'
-            - './docker/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
         networks:
             - sail
         healthcheck:
@@ -47,6 +47,15 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+    redocly:
+        build: 
+            context: ./docker/redoc
+            dockerfile: Dockerfile
+        image: redoc
+        volumes:
+            - './documentation:/spec'
+        ports:
+            - '5000:80'
 networks:
     sail:
         driver: bridge

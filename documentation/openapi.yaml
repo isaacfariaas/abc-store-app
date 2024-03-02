@@ -1,0 +1,305 @@
+openapi: 3.1.0
+info:
+  title: ABC Store API
+  version: 1.0.0
+  description: This is a sample server for a store.
+servers:
+  - url: http://localhost
+    description: Local server
+tags:
+  - name: Products
+  - name: Users
+  - name: Login
+  - name: Logout
+  - name: Register
+  - name: Categories
+x-tagGroups:
+  - name: Public Routes
+    tags:
+      - Login
+      - Register
+  - name: Private Routes
+    tags:
+      - Categories
+      - Products
+      - Users
+      - Logout
+paths:
+  /login:
+    post:
+      summary: Login
+      operationId: login_post
+      description: Log in user into the system.
+      tags:
+        - Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email
+                password:
+                  type: string
+                  description: The user's password
+              required:
+                - email
+                - password
+              example:
+                email: test@example.com
+                password: password
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  login:
+                    type: boolean
+                    description: Indicates whether the login was successful or not
+                  token:
+                    type: string
+                    description: Token generated for the authenticated user
+                  error:
+                    type: string
+                    description: Error message in case the login failed
+                example:
+                  login: true
+                  token: "1|wvonwKQO0It6Zt1zlzJY0ptE4Eiwr5ewPnpnMiGt"
+                  error: ""
+        "401":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  login:
+                    type: boolean
+                    description: Indicates whether the login was successful or not
+                  token:
+                    type: string
+                    description: Token generated for the authenticated user
+                  error:
+                    type: string
+                    description: Error message in case the login failed
+                example:
+                  login: false
+                  token: ""
+                  error: "User not enabled"
+  /logout:
+    post:
+        summary: Logout
+        operationId: logout_post
+        description:
+          This route is commonly used by users who want to securely log out of the
+          system and end their current session.
+        tags:
+          - Logout
+        security:
+          - HTTPBearer: []
+        responses:
+          "200":
+            description: Successful Response
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    logout:
+                      type: boolean
+                      description: Indicates whether the logout operation was successful or not.
+                    error:
+                      type: string
+                      description: A description of any error that occurred during the logout operation.
+          "401":
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      description: A description of the unauthorized access attempt.
+                  example:
+                    message: Unauthenticated.
+  /register:
+    post:
+      summary: Register
+      operationId: register_post
+      description: Register a new user into the system.
+      tags:
+        - Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The user's name
+                email:
+                  type: string
+                  description: The user's email
+                password:
+                  type: string
+                  description: The user's password
+              required:
+                - name
+                - email
+                - password
+              example:
+                name: John Doe
+                email: john@example.com
+                password: password
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  register:
+                    type: boolean
+                    description: Indicates whether the registration was successful or not
+                  token:
+                    type: string
+                    description: Token generated for the authenticated user
+                  error:
+                    type: string
+                    description: Error message in case the registration failed
+                example:
+                  register: true
+                  token: "1|wvonwKQO0It6Zt1zlzJY0ptE4Eiwr5ewPnpnMiGt"
+                  error: ""
+        "401":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  register:
+                    type: boolean
+                    description: Indicates whether the registration was successful or not
+                  token:
+                    type: string
+                    description: Token generated for the authenticated user
+                  error:
+                    type: string
+                    description: Error message in case the registration failed
+                example:
+                  register: false
+                  token: ""
+                  error: "User not enabled"
+  /products:
+    get:
+      summary: List all products
+      operationId: products_get
+      description: Get a list of all products in the store.
+      tags:
+        - Products
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      description: The product's unique identifier
+                    name:
+                      type: string
+                      description: The product's name
+                    price:
+                      type: number
+                      format: float
+                      description: The product's price
+                    description:
+                      type: text
+                      description: The product's description
+                    category:
+                      type: string
+                      description: The product's category
+                    amount:
+                      type: integer
+                      format: int64
+                      description: The product's amount
+                  example:
+                    - id: 1
+                      name: "Product 1"
+                      price: 100.0
+                      description: "This is a product"
+                      category: "Category 1"
+                      amount: 10
+                    - id: 2
+                      name: "Product 2"
+                      price: 200.0
+                      description: "This is another product"
+                      category: "Category 2"
+                      amount: 20
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A description of the unauthorized access attempt.
+                example:
+                  message: Unauthenticated.
+  /categories:
+    get:
+      summary: List all categories
+      operationId: categories_get
+      description: Get a list of all categories in the store.
+      tags:
+        - Categories
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                      description: The category's unique identifier
+                    name:
+                      type: string
+                      description: The category's name
+                  example:
+                    - id: 1
+                      name: "Category 1"
+                    - id: 2
+                      name: "Category 2"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: A description of the unauthorized access attempt.
+                example:
+                  message: Unauthenticated.
