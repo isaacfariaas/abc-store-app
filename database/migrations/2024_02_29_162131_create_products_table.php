@@ -17,7 +17,6 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->text('description');
             $table->foreignId('category_id')->constrained('categories');
-            $table->boolean('status');
             $table->integer('amount');
             $table->timestamps();
         });
