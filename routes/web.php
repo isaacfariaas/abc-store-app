@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,6 +24,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         ->name('products');
     Route::get('/categories', [CategoryController::class, 'index'])
         ->name('categories');
+    Route::resource('sales', SaleController::class)->except(['create', 'edit']);
 });
 
 require __DIR__ . '/auth.php';
