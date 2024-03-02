@@ -70,4 +70,13 @@ class SaleController extends Controller
         }
     }
     
+    public function show($id)
+    {
+        $sale = Sale::with(['productsSale', 'productsSale.product', 'productsSale.product.category', 'user'])->find($id);
+        if ($sale) {
+            return response()->json(['sale' => $sale]);
+        } else {
+            return response()->json(['message' => 'Sale not found'], 404);
+        }
+    }
 }
