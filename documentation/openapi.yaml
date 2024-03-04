@@ -8,7 +8,6 @@ servers:
     description: Local server
 tags:
   - name: Products
-  - name: Users
   - name: Login
   - name: Logout
   - name: Register
@@ -23,7 +22,6 @@ x-tagGroups:
     tags:
       - Categories
       - Products
-      - Users
       - Logout
       - Sales
 paths:
