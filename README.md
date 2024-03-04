@@ -65,6 +65,11 @@ Run Tests:
 ```sh
  sail test
 ```
+### Documentation
+
+- Check [Documentation](http://localhost:5000/) to know about the routes. 
+
+
 
 ## License
 
