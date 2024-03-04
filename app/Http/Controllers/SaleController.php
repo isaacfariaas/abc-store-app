@@ -61,7 +61,7 @@ class SaleController extends Controller
             $sale->save();
 
             DB::commit();
-            return response()->json(['creation' => true, 'error' => ''], 200);
+            return response()->json(['creation' => true, 'error' => ''], 201);
         } catch (\Exception $e) {
 
             DB::rollback();
@@ -113,7 +113,7 @@ class SaleController extends Controller
                 $product_stock->save();
                 $sale->save();
 
-                return response()->json(['update' => true, 'error' => ''], 200);
+                return response()->json(['update' => true, 'error' => ''], 201);
             } else {
                 return response()->json(['update' => false, 'error' => 'Sale not found'], 404);
             }
